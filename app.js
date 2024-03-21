@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.static(`${__dirname}/view`));
 
 console.log(process.env)
-
+//
 app.use(contactRoutes);
 app.use(studentRoutes);
 module.exports = app;
