@@ -1,0 +1,1 @@
+const News=require('./../models/NewsModel');
