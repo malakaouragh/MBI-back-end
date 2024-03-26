@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Webpage Design</title>
+    <link rel="stylesheet" href="contactus.css">
+</head>
+<body>
+     
+ <div class="main">
+       
+  <div class="navbar">
+    <div id="logo1">
+    <img src="photo/logo1.png" height="45" width="50"  alt="mbi logo">
+  </div>
+    <div class="nav1">
+
+      <a href="landingpage.html" title="home">Home</a>
+      <a href="#section2" title="Language">Language</a>
+      <a href="mailto:besso" title="Cources">Courses</a>
+      <a href="blog.html" title="Bloc">Blog</a>
+      <a href="mailto:besso" title="Reviews">Reviews</a>
+      <a href="contactus.html" title="Contactus">Contact us</a>
+
+    </div>
+    <div id="eli">
+
+
+      <a href="" class="button link">Log in</a>
+
+      <a href="sign.html" class="button link">sign in</a>
+
+    </div>
+
+  </div> 
+        <div class="content">
+            <h1>Contact Us</h1><br>
+            <p class="par">Welcome to MBI School ! Got questions or feedback? We're here for you
+             <br> Reach out through the contact form, drop us an email, or give us a call.
+                <br>  Your input matters, and we're committed to making your experience with us seamless.<br> Looking forward to hearing from you!</p>
+                <h4><i class="fa-solid fa-location-dot"></i> School’s Adress</h4><br> 
+                  <p class="txt"> Coop. Echourouk N° :08 Cité Bérarma Sétif, 19 000.</p><br>
+                  <h4 ><i class="fa-solid fa-phone"></i> Phone Number</h4><br> 
+                  <p class="txt">036 44 65 41 / 036 44 66 22</p><br>
+                  <h4 ><i class="fa-solid fa-envelope"></i> Email</h4><br> 
+                  <a href="mailto:bessouma@gmail.com" id="mail" class="txt">contact@mbialgeriacampus.com</a> 
+                  <br><br>
+                  <p id="txt1">Follow us</p>
+                  <div class="icons">
+                    <a href="https://web.facebook.com/MBIAlgeriaCampus?locale=fr_FR"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a href="https://www.instagram.com/mbialgeriacampus/"><ion-icon name="logo-instagram"></ion-icon></a>
+                    
+
+                </div>
+                <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+                <img id="blue" src="photo/blue.png" height="40" width="45" alt="blue">
+                <div class="form">
+                  <form  id='form' method="post" action="/contact">
+
+                    <h2>Send a message</h2>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    <input type="text" id="lastname" name="lastname" placeholder="Enter your lastname" required>
+                    <input type="email" id="email" name="email"  placeholder="Enter Email Here">
+                    <label  for="add"> Comment or Message</label>
+                    <textarea id="add" name="message" width="auto" hight="auto" required></textarea>
+                    <button class="btnn" type="submit">Send</button>
+                   </form>
+
+                </div>
+                
+            
+        </div>
+    </div>
+   <script>
+   document.getElementById('form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get form data
+    let name = document.getElementById("name").value;
+    let lastname = document.getElementById("lastname").value;
+    let email = document.getElementById("email").value;
+    let message = document.getElementById("add").value;
+
+    // Construct JSON object
+    let final = { name, lastname, email, message };
+
+    // Fetch POST request
+    fetch("/contact", {
+        method: "POST", 
+        headers: {
+            'Content-Type': 'application/json' // Set content type to JSON
+        },
+        body: JSON.stringify(final) // Convert object to JSON string
+    })
+    .then(response => response.json())
+    .then(res => {
+        // Display success message
+        showAlert('Message sent successfully!');
+
+    
+    })
+    .catch(error => {
+        console.log(error);
+        // Display error message
+        showAlert('Failed to send message. Please try again later.', 'error');
+    });
+});
+
+function showAlert(message, type = 'success') {
+    // Create a new div element
+    let alertDiv = document.createElement('div');
+    
+    // Add classes based on message type
+    alertDiv.className = 'alert';
+    alertDiv.classList.add(type);
+
+    // Add message text
+    alertDiv.appendChild(document.createTextNode(message));
+
+    // Append the alert to the body
+    document.body.appendChild(alertDiv);
+
+    // Automatically remove the alert after a few seconds (e.g., 5 seconds)
+    setTimeout(function() {
+        alertDiv.remove();
+    }, 5000); // 5000 milliseconds (5 seconds) delay before removing the alert
+}
+</script>
+</body>
+</html>
+
