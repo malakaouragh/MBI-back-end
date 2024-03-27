@@ -124,6 +124,30 @@ function showAlert(message, type = 'success') {
         alertDiv.remove();
     }, 5000); // 5000 milliseconds (5 seconds) delay before removing the alert
 }
+
+/*fetch('/dashboard/contact')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to retrieve messages');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Check if data is valid and contains the expected messages array
+        if (!data || !data.data || !data.data.messages || !Array.isArray(data.data.messages)) {
+            throw new Error('Invalid or missing messages data');
+        }
+
+        // Use the messages data
+        const messages = data.data.messages;
+        const messageCount = messages.length;
+        console.log('Total number of messages:', messageCount);
+
+    })
+    .catch(error => {
+        console.error('Error:', error.message);
+    });*/
+
 </script>
 </body>
 </html>

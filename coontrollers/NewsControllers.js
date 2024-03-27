@@ -10,3 +10,19 @@ exports.CreateNews= async (req,res)=>{
    }
 };
 
+exports.getallNews= async (req,res)=>{
+   try{
+    const theNews= await News.find();
+    res.status(200).json({
+       status: 'success',
+       results: theNews.length,      
+       data:{
+           theNews
+       }
+       
+    })
+   }
+   catch(err){
+           res.status(500).json({ message: 'Failed to get News', error: error.message });        
+   }
+}

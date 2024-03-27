@@ -1,4 +1,5 @@
 const Student=require('./../models/studentModel');
+
 exports.GetAllStudents= async (req,res)=>{
    const students= await Student.find();
    try{ 
