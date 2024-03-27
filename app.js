@@ -5,10 +5,12 @@ const studentRoutes =require('./Routers/StudentRouter');
 const newsRoutes =require('./Routers/NewsRouter');
 const languageRout = require('./Routers/LanguageRouter');
 const reviewRout = require('./Routers/ReviewRouter');
+const ActivityRout=require('./Routers/ActivityRouter')
 app.use(express.json());
 app.use(express.static(`${__dirname}/view`));
 
 //
+app.use(ActivityRout);
 app.use(contactRoutes);
 app.use(studentRoutes);
 app.use(newsRoutes);
