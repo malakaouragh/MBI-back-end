@@ -1,8 +1,9 @@
 const express = require ('express');
 const students = require('./../coontrollers/studentControllers')
 
-const Studentrouter = express.Router();
+const router = express.Router();
 //.post(`/login`,login)
-Studentrouter.get(`/dashboard/students`,students.GetAllStudents);
+router.get(`/dashboard/students`,students.GetAllStudents);
+router.get('/students/:id',students.getOne);
 
-module.exports = Studentrouter;
+module.exports = router;

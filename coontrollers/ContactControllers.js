@@ -11,8 +11,10 @@ exports.sendMessage = async (req, res) => {
   };
 
 exports.getAllmessages=async (req,res)=>{
+
     const messages= await Contact.find();
     try{
+
         res.status(200).json({
             status: 'success',
             results: messages.length,
@@ -31,7 +33,7 @@ exports.getAllmessages=async (req,res)=>{
 }
 exports.getContact= async (req,res)=>{
   try{
-   const contact= await contact.findById(req.params.id);
+   const contact= await Contact.findById(req.params.id);
    res.status(200).json({
       status: 'success',
       data:{
@@ -41,6 +43,7 @@ exports.getContact= async (req,res)=>{
    })
   }
   catch(err){
-          res.status(500).json({ message: 'Failed to get activities', error: error.message });        
+          res.status(500).json({ message: 'Failed to get contact', err: err.message });        
   }
 }
+

@@ -26,3 +26,20 @@ exports.getallNews= async (req,res)=>{
            res.status(500).json({ message: 'Failed to get News', error: error.message });        
    }
 }
+
+exports.getOneNews= async (req,res)=>{
+   try{
+    const data= await News.findById(req.params.id);
+    res.status(200).json({
+       status: 'success',
+       data:{
+           data
+       }
+       
+    })
+   }
+   catch(err){
+           res.status(500).json({ message: 'Failed to get ', err: err.message });        
+   }
+ }
+ 
