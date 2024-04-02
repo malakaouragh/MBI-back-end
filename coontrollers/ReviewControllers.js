@@ -62,7 +62,7 @@ exports.calculateAverageRating = async (req,res) => {
       }
     ]);
     res.status(200).json({
-      data{
+      data:{
       avgRating: avgResult[0].avgRating,
       numberOfReviews
     
