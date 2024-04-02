@@ -3,7 +3,8 @@ const express = require ('express')
 
 const router = express.Router()
 
-router.get('/Reviews',reviewController.getallReviews);
-router.get('/Reviews/:id',reviewController.getOne);
+router.route('/Reviews').get(reviewController.getallReviews).post(reviewController.createreview);
+router.route('/Reviews/:id').get(reviewController.getOne).delete(reviewController.delete);
+router.get('/Average-rating',reviewController.calculateAverageRating);
 
 module.exports=router;

@@ -42,4 +42,20 @@ exports.getOneNews= async (req,res)=>{
            res.status(500).json({ message: 'Failed to get ', err: err.message });        
    }
  }
+
+ exports.delete= async (req, res) => {
+   try {
+     await News.findByIdAndDelete(req.params.id);
+ 
+     res.status(204).json({
+       status: 'success',
+       data: null
+     });
+   } catch (err) {
+     res.status(404).json({
+       status: 'fail',
+       message: err
+     });
+   }
+ };
  

@@ -14,7 +14,14 @@ exports.getAllmessages=async (req,res)=>{
 
     const messages= await Contact.find();
     try{
+// making the api better filtering by adding a query search 
+        const queryBody = {...req.query}
+        
 
+
+
+
+//return data
         res.status(200).json({
             status: 'success',
             results: messages.length,
@@ -46,4 +53,20 @@ exports.getContact= async (req,res)=>{
           res.status(500).json({ message: 'Failed to get contact', err: err.message });        
   }
 }
+
+exports.delete= async (req, res) => {
+  try {
+    await Contact.findByIdAndDelete(req.params.id);
+
+    res.status(204).json({
+      status: 'success',
+      data: null
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    });
+  }
+};
 

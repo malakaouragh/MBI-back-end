@@ -6,6 +6,7 @@ const LanguageSchema =mongoose.Schema({
         type:String,
         required:true
     },
+    photo:{type:String},
     courses: [Course.schema]
  });
  const Language = mongoose.model('Language', LanguageSchema);

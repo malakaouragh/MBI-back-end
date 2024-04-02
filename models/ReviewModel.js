@@ -4,11 +4,7 @@ const ReviewSchema = mongoose.Schema({
     type: String, // Assuming the username is a string
     required: true
    },
-    course: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Course',
-      required: true
-    },
+
     rating: {
       type: Number,
       min: 1,

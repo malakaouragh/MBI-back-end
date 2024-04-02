@@ -2,7 +2,7 @@ const express = require ('express')
 const LanguageController =require( '../coontrollers/LanguageControllers');
 
 const router = express.Router()
-router.get('/languages',LanguageController.getalllanguages);
+router.route('/languages').get(LanguageController.getalllanguages).post(LanguageController.create);
 router.get('/languages/:id',LanguageController.getLanguage);
 
 
