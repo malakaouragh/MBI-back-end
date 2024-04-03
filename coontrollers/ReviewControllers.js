@@ -64,8 +64,7 @@ exports.calculateAverageRating = async (req,res) => {
     res.status(200).json({
       data:{
       avgRating: avgResult[0].avgRating,
-      numberOfReviews
-    
+      numberOfReviews: avgResult[0].numberOfReviews,    
     }
     });
   } catch (err) {

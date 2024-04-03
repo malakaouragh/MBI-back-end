@@ -5,7 +5,7 @@ const contactController = require('../coontrollers/ContactControllers');
 
 router.post('/contact', contactController.sendMessage);
 router.get('/dashboard/contact',contactController.getAllmessages);
-router.get('/contact/:id',contactController.getContact);
+router.route('/contact/:id').get(contactController.getContact).delete(contactController.delete);
  
 
 
