@@ -1,72 +1,54 @@
 const Contact=require('./../models/ContactModel');
-exports.sendMessage = async (req, res) => {
-    try {
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
+
+exports.sendMessage = catchAsync(async (req, res, next) => {
       const { name,lastname, email, message } = req.body;
       const newMessage = new Contact({ name,lastname, email, message });
       await newMessage.save();
       res.status(201).json({ message: 'Your message sent successfully we will reply as soon as possible' });
-    } catch (error) {
-      res.status(500).json({ message: 'Failed to send message', error: error.message });
-    }
-  };
+   
+  });
 
-exports.getAllmessages=async (req,res)=>{
+exports.getAllmessages=catchAsync(async (req, res, next) => {
 
     const messages= await Contact.find();
-    try{
-// making the api better filtering by adding a query search 
-        const queryBody = {...req.query}
-        
-
-
-
-
-//return data
-        res.status(200).json({
+            res.status(200).json({
             status: 'success',
             results: messages.length,
             data:{
                  messages}
         })
-    }
-    catch(err){
-       res.status(404).json({
-        status:'fail',
-        message:err,
 
-       });
-        
-    }
-}
-exports.getContact= async (req,res)=>{
-  try{
+});
+exports.getContact= catchAsync(async (req, res, next) => {
+
    const contact= await Contact.findById(req.params.id);
+
+   if (!contact) {
+    return next(new AppError('No contact found with that ID', 404));
+  }
    res.status(200).json({
       status: 'success',
       data:{
           contact
       }
       
-   })
-  }
-  catch(err){
-          res.status(500).json({ message: 'Failed to get contact', err: err.message });        
-  }
-}
+   });
 
-exports.delete= async (req, res) => {
-  try {
-    await Contact.findByIdAndDelete(req.params.id);
+});
+
+exports.delete= catchAsync(async (req, res, next) => {
+
+    const contact =await Contact.findByIdAndDelete(req.params.id);
+    if (!contact) {
+      return next(new AppError('No contact found with that ID', 404));
+    }
 
     res.status(204).json({
       status: 'success',
       data: null
     });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+
+});
 

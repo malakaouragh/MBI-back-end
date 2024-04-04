@@ -1,7 +1,10 @@
 const Review=require('./../models/ReviewModel');
-exports.getallReviews= async (req,res)=>{
-    try{
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
+
+exports.getallReviews=catchAsync(async (req, res, next)=>{
      const reviews= await Review.find();
+
      res.status(200).json({
         status: 'success',
         results:reviews.length,      
@@ -10,15 +13,15 @@ exports.getallReviews= async (req,res)=>{
         }
         
      })
-    }
-    catch(err){
-            res.status(500).json({ message: 'Failed to get News', error: error.message });        
-    }
- }
 
- exports.getOne= async (req,res)=>{
-    try{
+ });
+
+ exports.getOne=catchAsync(async (req, res, next)=>{
      const data= await Review.findById(req.params.id);
+
+     if (!data) {
+      return next(new AppError('No review found with that ID', 404));
+    }
      res.status(200).json({
         status: 'success',
         data:{
@@ -26,32 +29,19 @@ exports.getallReviews= async (req,res)=>{
         }
         
      })
-    }
-    catch(err){
-            res.status(500).json({ message: 'Failed to get ', err: err.message });        
-    }
-  }
+
+  });
  
-  exports.createreview = async (req, res) => {
-   try {
-     // const newTour = new Tour({})
-     // newTour.save()
+  exports.createreview =catchAsync(async (req, res, next)=>{
  
      const newreview = await Review.create(req.body);
  
      res.status(201).json({
        status: 'success',
      });
-   } catch (err) {
-     res.status(400).json({
-       status: 'fail',
-       message: err
-     });
-   }
- };
+ });
 
-exports.calculateAverageRating = async (req,res) => {
-  try {
+exports.calculateAverageRating = catchAsync(async (req, res, next)=>{
     const avgResult = await Review.aggregate([
       {
         $group: {
@@ -67,26 +57,19 @@ exports.calculateAverageRating = async (req,res) => {
       numberOfReviews: avgResult[0].numberOfReviews,    
     }
     });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
 
-exports.delete= async (req, res) => {
-  try {
-    await Review.findByIdAndDelete(req.params.id);
+});
+
+exports.delete= catchAsync(async (req, res, next)=>{
+    rev=await Review.findByIdAndDelete(req.params.id);
+
+    if (!rev) {
+      return next(new AppError('No review found with that ID', 404));
+    }
 
     res.status(204).json({
       status: 'success',
       data: null
     });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+ 
+});

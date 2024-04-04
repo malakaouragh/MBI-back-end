@@ -1,6 +1,8 @@
 const Language=require('./../models/LanguageModel');
-exports.getalllanguages= async (req,res)=>{
-    try{
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
+
+exports.getalllanguages= catchAsync(async (req, res, next) => {
      const languages= await Language.find();
      res.status(200).json({
         status: 'success',
@@ -10,15 +12,16 @@ exports.getalllanguages= async (req,res)=>{
         }
         
      })
-    }
-    catch(err){
-            res.status(500).json({ message: 'Failed to send message', error: error.message });        
-    }
-}
 
-exports.getLanguage= async (req,res)=>{
-    try{
+});
+
+exports.getLanguage= catchAsync(async (req, res, next) => {
      const language= await Language.findById(req.params.id);
+
+     if (!language) {
+      return next(new AppError('No language found with that ID', 404));
+    }
+
      res.status(200).json({
         status: 'success',
         data:{
@@ -26,41 +29,30 @@ exports.getLanguage= async (req,res)=>{
         }
         
      })
-    }
-    catch(err){
-            res.status(500).json({ message: 'Failed to get Language', err: err.message });        
-    }
-  }
 
-exports.create = async (req, res) => {
-    try {
+  });
+
+exports.create = catchAsync(async (req, res, next) => {
   
       const newlanguage = await Language.create(req.body);
   
       res.status(201).json({
         status: 'success',
       });
-    } catch (err) {
-      res.status(400).json({
-        status: 'fail',
-        message: err
-      });
-    }
-  };
+    
+  });
 
-exports.delete= async (req, res) => {
-    try {
-      await Language.findByIdAndDelete(req.params.id);
+exports.delete= catchAsync(async (req, res, next) => {
+     const lang= await Language.findByIdAndDelete(req.params.id);
+
+      if (!lang) {
+        return next(new AppError('No language found with that ID', 404));
+      }
   
       res.status(204).json({
         status: 'success',
         data: null
       });
-    } catch (err) {
-      res.status(404).json({
-        status: 'fail',
-        message: err
-      });
-    }
-  };
+   
+  });
   

@@ -1,8 +1,10 @@
 const Course=require('./../models/CourseModel');
-const Language=require('./../models/LanguageModel')
+const Language=require('./../models/LanguageModel');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
-exports.createCourse = async (req, res) => {
-    try {
+
+exports.createCourse = catchAsync(async (req, res, next) => {
       // Extract course details and language ID from request body
       const { languageId, title, description, instructor, price, duration, studentsEnrolled, maxStudents, photoUrl, level } = req.body;
   
@@ -22,7 +24,7 @@ exports.createCourse = async (req, res) => {
       // Find the language document by its ID
       const language = await Language.findById(languageId);
       if (!language) {
-        return res.status(404).json({ message: 'Language not found' });
+        return next(new AppError('No language found with that ID', 404));
       }
   
       // Push the new course into the courses array of the language document
@@ -32,23 +34,17 @@ exports.createCourse = async (req, res) => {
       await language.save();
   
       res.status(201).json({ message: 'Course created successfully' });
-    } catch (error) {
-      res.status(400).json({ message: error.message });
-    }
-  };
+  });
 
-exports.delete= async (req, res) => {
-    try {
-      await Course.findByIdAndDelete(req.params.id);
+exports.delete= catchAsync(async (req, res, next) => {
+      const cour =await Course.findByIdAndDelete(req.params.id);
   
+      if (!cour) {
+        return next(new AppError('No course found with that ID', 404));
+      }
       res.status(204).json({
         status: 'success',
         data: null
       });
-    } catch (err) {
-      res.status(404).json({
-        status: 'fail',
-        message: err
-      });
-    }
-  };
+
+  });

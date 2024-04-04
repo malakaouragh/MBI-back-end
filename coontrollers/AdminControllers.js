@@ -1,1 +1,0 @@
-const Admin=require('./../models/AdminModel');

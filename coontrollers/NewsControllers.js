@@ -1,17 +1,15 @@
 const News=require('./../models/NewsModel');
-exports.CreateNews= async (req,res)=>{
-   try {
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
+
+exports.CreateNews= catchAsync(async (req, res, next) => {
     const {title,content,photo}=req.body;
     const newNews =new News({title,content,photo});
     await newNews.save();
     res.status(201).json({message:'the news id crfeated successfully'});
-   }catch(err){
-    res.status(500).json({message:'There is an error'});
-   }
-};
+  });
 
-exports.getallNews= async (req,res)=>{
-   try{
+exports.getallNews= catchAsync(async (req, res, next) => {
     const theNews= await News.find();
     res.status(200).json({
        status: 'success',
@@ -21,15 +19,16 @@ exports.getallNews= async (req,res)=>{
        }
        
     })
-   }
-   catch(err){
-           res.status(500).json({ message: 'Failed to get News', error: error.message });        
-   }
-}
+  
+});
 
-exports.getOneNews= async (req,res)=>{
-   try{
+exports.getOneNews=catchAsync(async (req, res, next) => {
     const data= await News.findById(req.params.id);
+
+    if (!data) {
+      return next(new AppError('No news found with that ID', 404));
+    }
+
     res.status(200).json({
        status: 'success',
        data:{
@@ -37,25 +36,20 @@ exports.getOneNews= async (req,res)=>{
        }
        
     })
-   }
-   catch(err){
-           res.status(500).json({ message: 'Failed to get ', err: err.message });        
-   }
- }
 
- exports.delete= async (req, res) => {
-   try {
-     await News.findByIdAndDelete(req.params.id);
+ });
+
+ exports.delete=catchAsync(async (req, res, next) => {
+     const rev = await News.findByIdAndDelete(req.params.id);
+
+     if (!rev) {
+      return next(new AppError('No news found with that ID', 404));
+    }
  
      res.status(204).json({
        status: 'success',
        data: null
      });
-   } catch (err) {
-     res.status(404).json({
-       status: 'fail',
-       message: err
-     });
-   }
- };
+  
+ });
  

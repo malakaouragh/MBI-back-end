@@ -1,8 +1,10 @@
 const Activities=require('./../models/activityModel');
 const APIFeatures = require('./../utils/APIfeautures');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
-exports.getallActivities= async (req,res)=>{
-    try{
+
+exports.getallActivities=catchAsync(async (req, res, next) => {
 
 
      const theActivities= await Activities.find();
@@ -14,14 +16,13 @@ exports.getallActivities= async (req,res)=>{
         }
         
      })
-    }
-    catch(err){
-            res.status(500).json({ message: 'Failed to get activities', error: error.message });        
-    }
- }
- exports.getActivity= async (req,res)=>{
-    try{
+ });
+ exports.getActivity= catchAsync(async (req, res, next) => {
      const theActivities= await Activities.find(req.params.id);
+
+     if(!theActivities){
+      return next(new AppError('No course found with that ID', 404));
+    }
      res.status(200).json({
         status: 'success',
         data:{
@@ -29,40 +30,28 @@ exports.getallActivities= async (req,res)=>{
         }
         
      })
-    }
-    catch(err){
-            res.status(500).json({ message: 'Failed to get activities', error: err.message });        
-    }
- }
 
- exports.createActivity = async (req, res) => {
-   try {
+ });
+
+ exports.createActivity = catchAsync(async (req, res, next) => {
  
      const newActivity = await Activities.create(req.body);
  
      res.status(201).json({
        status: 'success',
      });
-   } catch (err) {
-     res.status(400).json({
-       status: 'fail',
-       message: err
-     });
-   }
- };
+ });
 
-exports.delete= async (req, res) => {
-  try {
-    await Activities.findByIdAndDelete(req.params.id);
+exports.delete= catchAsync(async (req, res, next) => {
+    const ACT=await Activities.findByIdAndDelete(req.params.id);
 
+    if(!ACT){
+      return next(new AppError('No course found with that ID', 404));
+    }
     res.status(204).json({
       status: 'success',
       data: null
     });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+
+  
+});
