@@ -1,5 +1,8 @@
 const mongoose=require('mongoose');
 const validator = require('validator');
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+
 
 
 const validatePhoneNumber = (phoneNumber) => {
@@ -12,7 +15,8 @@ const UserSchema = new mongoose.Schema({
 
     name: {
       type: String,
-      required: [true, 'Please tell us your name!']
+      required: [true, 'Please tell us your name!'],
+      unique:true
     },
     email: {
       type: String,
@@ -74,6 +78,13 @@ const UserSchema = new mongoose.Schema({
     },
 
 
+  });
+
+UserSchema.pre('save', async function(next) {
+    if (!this.isModified('password')) return next();
+  
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
   });
 
 
