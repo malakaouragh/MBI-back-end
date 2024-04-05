@@ -1,4 +1,6 @@
-const reviewController=require('./../coontrollers/ReviewControllers')
+const reviewController=require('./../coontrollers/ReviewControllers');
+const authController = require('./../coontrollers/authController');
+
 const express = require ('express')
 
 const router = express.Router()

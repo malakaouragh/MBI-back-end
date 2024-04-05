@@ -2,6 +2,7 @@ const News=require('./../models/NewsModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
+
 exports.CreateNews= catchAsync(async (req, res, next) => {
     const {title,content,photo}=req.body;
     const newNews =new News({title,content,photo});

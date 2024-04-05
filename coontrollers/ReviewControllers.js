@@ -2,6 +2,7 @@ const Review=require('./../models/ReviewModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
+
 exports.getallReviews=catchAsync(async (req, res, next)=>{
      const reviews= await Review.find();
 

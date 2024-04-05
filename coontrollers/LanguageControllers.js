@@ -2,6 +2,7 @@ const Language=require('./../models/LanguageModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
+
 exports.getalllanguages= catchAsync(async (req, res, next) => {
      const languages= await Language.find();
      res.status(200).json({

@@ -5,7 +5,8 @@ const authController = require('./../coontrollers/authController');
 const router = express.Router();
 
 router.post('/signup', authController.signup);
-router.get(`/dashboard/students`,students.GetAllStudents);
-router.route('/students/:id').get(students.getOne).patch(students.update).delete(students.deleteStudent);
+router.post('/login', authController.login);
+router.get(`/dashboard/students`,authController.protect,authController.restrictTo('admin'),students.GetAllStudents);
+router.route('/students/:id').get(students.getOne).patch(authController.protect,students.update).delete(authController.protect,students.deleteStudent);
 
 module.exports = router;
