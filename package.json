@@ -20,6 +20,7 @@
     "mongoose": "^7.6.8",
     "morgan": "^1.10.0",
     "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.13",
     "util": "^0.12.5",
     "validator": "^13.11.0"
   },

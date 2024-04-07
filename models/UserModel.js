@@ -4,12 +4,17 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
 
-
-const validatePhoneNumber = (phoneNumber) => {
-  // Use a regular expression to validate the phone number format
-  const phoneNumberRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
-  return phoneNumberRegex.test(phoneNumber);
-};
+function validatePhoneNumber(phoneNumber) {
+  // Remove any non-digit characters from the phone number
+  const digitsOnly = phoneNumber.replace(/\D/g, '');
+  
+  // Check if the phone number contains exactly 10 digits
+  if (digitsOnly.length === 10) {
+    return true; // Valid phone number
+  } else {
+    return false; // Invalid phone number
+  }
+}
 
 const UserSchema = new mongoose.Schema({
 
@@ -101,6 +106,14 @@ UserSchema.pre('save', function(next) {
     next();
   });
 
+
+UserSchema.methods.correctPassword = async function(
+    candidatePassword,
+    userPassword
+  ) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+  };
+
 UserSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
     if (this.passwordChangedAt) {
       const changedTimestamp = parseInt(
@@ -114,14 +127,23 @@ UserSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
     // False means NOT changed
     return false;
   };
+  
 
-UserSchema.methods.correctPassword = async function(
-    candidatePassword,
-    userPassword
-  ) {
-    return await bcrypt.compare(candidatePassword, userPassword);
+UserSchema.methods.createPasswordResetToken = function() {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+  
+    this.passwordResetToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+  
+    console.log({ resetToken }, this.passwordResetToken);
+  
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  
+    return resetToken;
   };
-
+  
 
 
 const User = mongoose.model('User', UserSchema);

@@ -2,6 +2,7 @@ const Student=require('../models/UserModel');
 const APIFeatures = require('../utils/APIfeautures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const auth=require('./authController')
 
 
 exports.GetAllStudents= catchAsync(async (req, res, next)=>{
@@ -47,20 +48,39 @@ exports.deleteStudent =catchAsync(async (req, res, next) => {
   });
 
 exports.update = catchAsync(async (req, res, next) => {
-      const student = await Student.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
-      });
-
-      if (!student) {
-        return next(new AppError('No student found with that ID', 404));
-      }
+    // 1) Create error if user POSTs password data
+    if (req.body.password || req.body.passwordConfirm) {
+      return next(
+        new AppError(
+          'This route is not for password updates. Please use /updateMyPassword.',
+          400
+        )
+      );
+    }
   
-      res.status(200).json({
-        status: 'success',
-      });
-
+  
+    // 3) Update user document
+    const updatedUser = await Student.findByIdAndUpdate(req.user.id,req.body, {
+      new: true,
+      runValidators: true
+    });
+  
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user: updatedUser
+      }
+    });
   });
 
+exports.deleteMe = catchAsync(async (req, res, next) => {
+    await User.findByIdAndUpdate(req.user.id, { active: false });
+  
+    res.status(204).json({
+      status: 'success',
+      data: null
+    });
+  });
+  
 
   
