@@ -92,6 +92,12 @@ const UserSchema = new mongoose.Schema({
 
   });
 
+UserSchema.pre(/^find/, function(next) {
+    // this points to the current query
+    this.find({ active: { $ne: false } });
+    next();
+  });
+
 UserSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
   
