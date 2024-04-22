@@ -24,7 +24,7 @@ app.use(helmet());
 app.use(express.static(`${__dirname}/view`));
 
 const limiter = rateLimit({
-  max: 10,
+  max: 90,
   windowMs: 30 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in a half hour!'
 });
@@ -57,7 +57,7 @@ app.use(ActivityRout);
 app.use(contactRoutes);
 app.use(studentRoutes);
 app.use(newsRoutes);
-app.use(languageRout);
+app.use('/languages',languageRout);
 app.use(reviewRout);
 app.use(CourseRoute);
 

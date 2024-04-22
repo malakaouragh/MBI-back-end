@@ -6,9 +6,19 @@ const LanguageSchema =mongoose.Schema({
         type:String,
         required:true
     },
-    photo:{type:String},
-    courses: [Course.schema]
- });
+    photo:{type:String}},
+    {
+      toJSON: { virtuals: true },
+      toObject: { virtuals: true }
+    });
+
+
+ LanguageSchema.virtual('courses', {
+  ref: 'Course',
+  foreignField: 'language',
+  localField: '_id'
+});
+
  const Language = mongoose.model('Language', LanguageSchema);
 
  module.exports=Language;
