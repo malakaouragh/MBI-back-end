@@ -5,6 +5,16 @@ const AppError = require('./../utils/appError');
 const auth=require('./authController')
 
 
+
+exports.getme = catchAsync(async (req, res, next) => {
+  const me =await Student.findById(req.user.id);
+
+  res.status(200).json({
+    status: 'success',
+    data: me
+  });
+});
+
 exports.GetAllStudents= catchAsync(async (req, res, next)=>{
     const features = new APIFeatures(Student.find(), req.query)
     .filter()
@@ -82,5 +92,47 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     });
   });
   
+exports.getUserCourses = catchAsync(async (req, res, next) => {
+    const user = await Student.findById(req.user.id).populate({
+      path: 'courses',
+      populate: {
+          path: 'course', // Populating the course field within each course document
+          select: 'title description instructor studentsEnrolled level language ' // Selecting specific fields from the course document
+      }})
+
+    if (!user) {
+        return res.status(404).json({ status: 'fail', message: 'User not found' });
+    }
+
+    const userCourses = user.courses;
+    //userCourses = userCourses.slice(0, -2);
+    res.status(200).json({userCourses});
+});
+
+
+// Controller function to add a certificate for a specific course to a user
+exports.addCertificateToUser = catchAsync(async (req, res) => {
+        const { courseId, certificate } = req.body; 
+        // Assuming , courseId, and certificate are sent in the request body
+        const userId=req.params.userId;
+        // Find the user by ID
+        const user = await Student.findById(userId);
+
+        // Check if the user exists
+        if (!user) {
+            return res.status(404).json({ status: 'error', message: 'User not found' });
+        }
+        const existingCourseIndex = user.courses.findIndex(course => course.course.equals(courseId));
+        if (existingCourseIndex === -1) {
+          return res.status(404).json({ status: 'fail', message: 'Course not found for this user' });
+      }
+
+      // Update the certificate for the specific course
+      user.courses[existingCourseIndex].certificate = certificate;
+
+      // Save the changes
+      await user.save();
+        return res.status(200).json({ status: 'success', message: 'Certificate added successfully' });
+});
 
   

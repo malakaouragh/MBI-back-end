@@ -4,6 +4,12 @@ const authController = require('./../coontrollers/authController');
 
 const router = express.Router({ mergeParams: true });
 
-router.route('/').post(authController.protect,authController.restrictTo('Student'),courseController.createCourse).delete(authController.protect,authController.restrictTo('admin'),courseController.delete);
+router.route('/').post(authController.protect,authController.restrictTo('admin'),courseController.createCourse)
+.get(courseController.getAll).delete(authController.protect,authController.restrictTo('admin'),courseController.delete);
+
+router.route('/:id').get(courseController.getAll).delete(authController.protect,authController.restrictTo('admin'),courseController.delete);
+router.post('/purchase/:courseId',authController.protect,courseController.purchaseCourse);
+
+
 
 module.exports=router;

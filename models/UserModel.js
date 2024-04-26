@@ -87,9 +87,22 @@ const UserSchema = new mongoose.Schema({
   active: {
     type: Boolean,
     default: true,
-    select: false}
-
-
+    select: false},
+    courses: [
+      {
+          course: {
+              type: mongoose.Schema.ObjectId,
+              ref: 'Course'
+          },
+          certificate: {
+              type: String
+          }
+      }
+  ]
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   });
 
 UserSchema.pre(/^find/, function(next) {
@@ -150,7 +163,5 @@ UserSchema.methods.createPasswordResetToken = function() {
     return resetToken;
   };
   
-
-
 const User = mongoose.model('User', UserSchema);
  module.exports=User;

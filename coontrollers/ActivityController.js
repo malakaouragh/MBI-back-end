@@ -19,7 +19,7 @@ exports.getallActivities=catchAsync(async (req, res, next) => {
      })
  });
  exports.getActivity= catchAsync(async (req, res, next) => {
-     const theActivities= await Activities.find(req.params.id);
+     const theActivities= await Activities.findById(req.params.id);
 
      if(!theActivities){
       return next(new AppError('No course found with that ID', 404));

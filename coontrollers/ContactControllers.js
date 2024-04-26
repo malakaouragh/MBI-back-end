@@ -1,13 +1,25 @@
 const Contact=require('./../models/ContactModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const sendEmail = require('./../utils/email');
+
 
 exports.sendMessage = catchAsync(async (req, res, next) => {
       const { name,lastname, email, message } = req.body;
-      const newMessage = new Contact({ name,lastname, email, message });
-      await newMessage.save();
-      res.status(201).json({ message: 'Your message sent successfully we will reply as soon as possible' });
-   
+
+      
+      await sendEmail({
+        sen :email,
+        rec: 'garth.bahringer@ethereal.email',
+        subject: message[10],
+        message
+      });
+  
+      res.status(200).json({
+        status: 'success',
+        message: 'contact sent '
+      });
+    
   });
 
 exports.getAllmessages=catchAsync(async (req, res, next) => {

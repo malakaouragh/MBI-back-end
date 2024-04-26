@@ -1,4 +1,6 @@
+const { Certificate } = require('crypto');
 const mongoose=require('mongoose');
+const { type } = require('os');
 
 const CourseSchema = mongoose.Schema({
     title: {
@@ -12,7 +14,7 @@ const CourseSchema = mongoose.Schema({
     price: {
       type: Number||String,
       required: true,
-      default:`free`
+      default:0
     },
     duration: {
       type: Number,
@@ -34,7 +36,6 @@ const CourseSchema = mongoose.Schema({
     language: {
       type: mongoose.Schema.ObjectId,
       ref: 'Language',
-      required: [true, 'Course must belong to a Language.']
     },
   },
   {
