@@ -7,11 +7,14 @@ const router = express.Router();
 
 router.use("/:LanguageId/Courses", courserouter);
 
-router.route("/languages").get(LanguageController.getalllanguages).post(
-  authController.protect,
-  // authController.restrictTo("admin"),
-  LanguageController.create
-);
+router
+  .route("/languages")
+  .get(LanguageController.getalllanguages)
+  .post(
+    authController.protect,
+    authController.restrictTo("admin"),
+    LanguageController.create
+  );
 router
   .route("/languages/:id")
   .get(LanguageController.getLanguage)
