@@ -3,6 +3,8 @@ const students = require("./../coontrollers/UserControllers");
 const authController = require("./../coontrollers/authController");
 const courseController = require("./../coontrollers/CourseControllers");
 
+
+
 const router = express.Router();
 
 router.post("/signup", authController.signup);
@@ -15,7 +17,7 @@ router.get(
 );
 router
   .route("/students/:id")
-  .get(students.getOne)
+  .get(students.uploadUserPhoto,students.getOne)
   .delete(authController.protect, students.deleteStudent);
 router.patch("/resetPassword/:token", authController.resetPassword);
 router.patch(
@@ -23,7 +25,7 @@ router.patch(
   authController.protect,
   authController.updatePassword
 );
-router.patch("/updateMe", authController.protect, students.update);
+router.patch("/updateMe", authController.protect,students.uploadUserPhoto, students.update);
 router.delete("/deleteMe", authController.protect, students.deleteMe);
 router.post("/forgotPassword", authController.forgotPassword);
 router.get(

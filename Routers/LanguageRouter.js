@@ -9,6 +9,7 @@ router.use("/:LanguageId/Courses", courserouter);
 
 router.route("/languages").get(LanguageController.getalllanguages).post(
   authController.protect,
+  LanguageController.uploadPhoto,
   // authController.restrictTo("admin"),
   LanguageController.create
 );

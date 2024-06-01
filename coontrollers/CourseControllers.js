@@ -4,8 +4,37 @@ const Language = require("./../models/LanguageModel");
 const Earnings = require("./../models/MbiEarning");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
+const multer = require('multer');
+
+const multerStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/img/Course');
+  },
+  filename: function (req, file, cb) {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `course-${req.body.title}-${Date.now()}.${ext}`);
+  }
+});
+
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload only images.', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+exports.uploadPhoto = upload.single('photo');
+
 
 exports.createCourse = catchAsync(async (req, res, next) => {
+  if (req.file) req.body.photo = req.file.filename;
   if (!req.body.tour) req.body.language = req.params.LanguageId;
   const newCourse = await Course.create(req.body);
 

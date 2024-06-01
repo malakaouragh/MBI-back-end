@@ -9,6 +9,7 @@ router
   .post(
     authController.protect,
     authController.restrictTo("admin"),
+    courseController.uploadPhoto,
     courseController.createCourse
   )
   .get(courseController.getAll)

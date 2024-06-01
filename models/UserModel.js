@@ -36,7 +36,9 @@ const UserSchema = new mongoose.Schema({
       minlength: 8,
       select: false
     },
-    photo: String,
+    photo:{ type:String,
+      default: 'user.jpg'},
+
   role: {
     type: String,
     enum: ['Student', 'admin'],
